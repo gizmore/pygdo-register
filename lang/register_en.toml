@@ -1,1 +1,7 @@
 module_register = "Sign-Up"
+
+########
+# Form #
+########
+mt_register_form = "Register"
+md_register_form = "Signup on this PyGDO Website."

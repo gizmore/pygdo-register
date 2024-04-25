@@ -3,7 +3,7 @@ import unittest
 
 from gdo.base.Application import Application
 from gdo.base.ModuleLoader import ModuleLoader
-from gdotest.TestUtil import reinstall_module
+from gdotest.TestUtil import reinstall_module, web_plug
 
 
 class RegisterTest(unittest.TestCase):
@@ -16,8 +16,9 @@ class RegisterTest(unittest.TestCase):
         reinstall_module('register')
         return self
 
-    def test_01_guest_signup(self):
-        pass
+    def test_01_signup_sidebar_hook(self):
+        out = web_plug('register.form.html').exec()
+        self.assertIn('Sign-Up', out, 'Register module did not hook right sidebar')
 
 
 if __name__ == '__main__':
