@@ -5,3 +5,9 @@ module_register = "Sign-Up"
 ########
 mt_register_form = "Register"
 md_register_form = "Signup on this PyGDO Website."
+
+#########
+# Guest #
+#########
+mt_register_guest = "Continue as Guest"
+md_register_guest = "Use this PyGDO Website as a guest user. You cannot recover if you loose your password."

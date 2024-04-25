@@ -3,6 +3,7 @@ import unittest
 
 from gdo.base.Application import Application
 from gdo.base.ModuleLoader import ModuleLoader
+from gdo.core.connector.Web import Web
 from gdotest.TestUtil import reinstall_module, web_plug
 
 
@@ -20,6 +21,14 @@ class RegisterTest(unittest.TestCase):
         out = web_plug('register.form.html').exec()
         self.assertIn('Sign-Up', out, 'Register module did not hook right sidebar')
 
+    def test_02_signup_hooked_with_guest_link(self):
+        out = web_plug('register.form.html').exec()
+        self.assertIn('Continue as Guest', out, 'Register module did not hook register form with guests')
+
+    def test_03_signup_guest_user(self):
+        out = web_plug('register.guest.html').post({"login": "AGuest", "password": "11111111", "_back_to": "/core.welcome.html", "submit": "1"}).exec()
+        user = Web.get_server().get_user_by_name('_AGuest')
+        self.assertIsNotNone(user, "Simple guest signup does not work")
 
 if __name__ == '__main__':
     unittest.main()
