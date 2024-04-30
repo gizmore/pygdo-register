@@ -30,5 +30,6 @@ class RegisterTest(unittest.TestCase):
         user = Web.get_server().get_user_by_name('_AGuest')
         self.assertIsNotNone(user, "Simple guest signup does not work")
 
+
 if __name__ == '__main__':
     unittest.main()
