@@ -36,7 +36,7 @@ class form(MethodForm):
     def get_email(self):
         return self.param_val('email')
 
-    def gdo_execute(self):
+    def form_submitted(self):
         mod = module_register.instance()
         username = self.get_username()
         password = self.get_password()

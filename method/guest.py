@@ -7,6 +7,7 @@ from gdo.form.MethodForm import MethodForm
 class guest(MethodForm):
 
     def gdo_create_form(self, form: GDT_Form) -> None:
+        form.text('md_register_guest')
         form.add_field(
             GDT_Name('login').not_null(),
             GDT_Password('password').not_null(),
