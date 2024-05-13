@@ -1,6 +1,7 @@
 from gdo.base.GDO_Module import GDO_Module
 from gdo.base.GDT import GDT
 from gdo.core import module_core
+from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.ui.GDT_Link import GDT_Link
@@ -39,7 +40,8 @@ class module_register(GDO_Module):
         return self.get_config_value('signup_autologin')
 
     def gdo_init_sidebar(self, page):
-        page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_register'))
+        if GDO_User.current().is_ghost():
+            page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_register'))
 
     def gdo_init(self):
         if self.cfg_guest_signup():
