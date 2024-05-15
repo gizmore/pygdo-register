@@ -16,7 +16,7 @@ class form(MethodForm):
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Name('username').not_null())
         form.add_field(GDT_Password('password').not_null())
-        form.add_field(GDT_Validator().validate_form_field(form,'username', self.validate_unique_name))
+        form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
         if module_register.instance().cfg_signup_mail():
             form.add_field(GDT_Email('email').not_null())
         super().gdo_create_form(form)
@@ -27,20 +27,11 @@ class form(MethodForm):
             return field.error('err_violate_unique')
         return True
 
-    def get_username(self) -> str:
-        return f"_{self.param_val('username')}"
-
-    def get_password(self):
-        return self.param_val('password')
-
-    def get_email(self):
-        return self.param_val('email')
-
     def form_submitted(self):
         mod = module_register.instance()
-        username = self.get_username()
-        password = self.get_password()
-        email = self.get_email()
+        username = self.param_val('username')
+        password = self.param_val('password')
+        email = self.param_val('email')
 
         activation = GDO_UserActivation.blank({
 
