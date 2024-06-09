@@ -14,8 +14,8 @@ class RegisterTest(unittest.TestCase):
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         loader.load_modules_db(True)
-        loader.init_modules()
         reinstall_module('register')
+        loader.init_modules(True, True)
         WebPlug.COOKIES = {}
         return self
 
