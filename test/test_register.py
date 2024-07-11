@@ -5,6 +5,7 @@ from gdo.base.Application import Application
 from gdo.base.ModuleLoader import ModuleLoader
 from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
+from gdo.register.module_register import module_register
 from gdotest.TestUtil import reinstall_module, web_plug, WebPlug
 
 
@@ -33,6 +34,18 @@ class RegisterTest(unittest.TestCase):
         user = Web.get_server().get_user_by_name('~AGuest~')
         self.assertIsNotNone(user, "Simple guest signup does not work")
         self.assertIn('from where you came.', out, '_back_to does not work.')
+
+    def test_04_instant_register(self):
+        module_register.instance().save_config_val('signup_mail_required', '0')
+        out = web_plug('register.form.html?username=petra2&password=11111111&submit=1').exec()
+        user = GDO_User.current()
+        user.delete()
+        self.assertEquals(user.get_name(), 'petra2', 'After Register Not authenticated')
+        module_register.instance().save_config_val('signup_mail_required', '1')
+
+    def test_05_register_and_signup(self):
+        out = web_plug('register.form.html?username=petra&password=11111111&email=petra@gizmore.org&submit=1').exec()
+        self.assertIn('instructions', out, 'Cannot send register mail.')
 
 
 if __name__ == '__main__':

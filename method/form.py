@@ -1,14 +1,20 @@
 from gdo.base.Application import Application
 from gdo.base.GDT import GDT
+from gdo.base.Trans import t, sitename
+from gdo.base.Util import url
 from gdo.core.GDT_Name import GDT_Name
 from gdo.core.GDT_Password import GDT_Password
+from gdo.core.GDT_Serialize import GDT_Serialize
 from gdo.core.connector.Web import Web
 from gdo.form.GDT_Form import GDT_Form
 from gdo.form.GDT_Validator import GDT_Validator
 from gdo.form.MethodForm import MethodForm
 from gdo.mail.GDT_Email import GDT_Email
+from gdo.mail.Mail import Mail
 from gdo.register import module_register
 from gdo.register.GDO_UserActivation import GDO_UserActivation
+from gdo.register.method.activate import activate
+from gdo.ui.GDT_Link import GDT_Link
 
 
 class form(MethodForm):
@@ -33,12 +39,36 @@ class form(MethodForm):
         password = self.param_val('password')
         email = self.param_val('email')
 
+        known = ('username', 'password', 'email', 'submit', 'csrf')
+        data = {}
+        for gdt in self.parameters().values():
+            key = gdt.get_name()
+            if key not in known:
+                val = gdt.get_val()
+                if val is not None:
+                    data[key] = val
         activation = GDO_UserActivation.blank({
-
-        })
+            'ua_username': username,
+            'ua_email': email,
+            'ua_password': GDT_Password.hash(password),
+            'ua_data': GDT_Serialize('ua_data').to_val(data),
+        }).insert()
 
         if mod.cfg_signup_mail():
-            self.send_signup_mail(us)
+            self.send_signup_mail(activation)
+            return self.msg('msg_activation_mail_sent')
         else:
-            activate().activate(activation)
-        Mail.from_bot()
+            return activate().env_copy(self).activate(activation)
+
+    def send_signup_mail(self, activation: GDO_UserActivation):
+        mail = Mail.from_bot()
+        mail.subject(t('mails_signup'))
+        link = GDT_Link().href(url('register', 'activate', f"&id={activation.get_id()}&token={activation.gdo_hash()}"))
+        mail.body(t('mailb_signup', [
+            activation.gdo_val('ua_username'),
+            sitename(),
+            link.render_html(),
+        ]))
+        mail.recipient(activation.gdo_val('ua_email'))
+        mail.send()
+

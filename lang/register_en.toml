@@ -5,6 +5,9 @@ module_register = "Sign-Up"
 ########
 mt_register_form = "Register"
 md_register_form = "Signup on this PyGDO Website."
+mails_signup = "Sign Up"
+mailb_signup = "Hello %s\n\nIt appears you want to signup on %s\n\nIf not, you can ignore this email.\n\nIf you want to signup, follow this link:\n\n%s\n\nKind Regards,\nThe {1} System"
+msg_activation_mail_sent = "We have sent you an email with instructions how to activate your account."
 
 #########
 # Guest #
@@ -14,3 +17,10 @@ md_register_guest = "Use this PyGDO Website as a guest user. You cannot recover 
 link_back_to = 'back'
 msg_guest_created = "You are now using the site as %s."
 msg_guest_created_back = "You are now using the site as %s. Go %s from where you came."
+
+############
+# Activate #
+############
+mt_register_activate = "Activate Account"
+md_register_activate = "Activate your account."
+msg_activated = "Your account has been activated."
