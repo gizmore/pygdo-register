@@ -11,6 +11,9 @@ from gdo.register.module_register import module_register
 
 class activate(Method):
 
+    def gdo_trigger(self) -> str:
+        return ""
+
     def gdo_parameters(self) -> [GDT]:
         return [
             GDT_Object('id').table(GDO_UserActivation.table()),

@@ -19,6 +19,9 @@ from gdo.ui.GDT_Link import GDT_Link
 
 class form(MethodForm):
 
+    def gdo_trigger(self) -> str:
+        return ""
+
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Name('username').not_null())
         form.add_field(GDT_Password('password').not_null())
