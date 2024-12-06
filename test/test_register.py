@@ -40,7 +40,7 @@ class RegisterTest(unittest.TestCase):
         out = web_plug('register.form.html?username=petra2&password=11111111&submit=1').exec()
         user = GDO_User.current()
         user.delete()
-        self.assertEquals(user.get_name(), 'petra2', 'After Register Not authenticated')
+        self.assertEqual(user.get_name(), 'petra2', 'After Register Not authenticated')
         module_register.instance().save_config_val('signup_mail_required', '1')
 
     def test_05_register_and_signup(self):
