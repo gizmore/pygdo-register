@@ -20,6 +20,10 @@ class RegisterTest(unittest.TestCase):
         WebPlug.COOKIES = {}
         return self
 
+    def test_00_welcome_again(self):
+        out = web_plug('core.welcome.html').exec()
+        self.assertIn('Welcome', out, 'Somethings wrong!')
+
     def test_01_signup_sidebar_hook(self):
         out = web_plug('register.form.html').exec()
         self.assertIn('Sign-Up', out, 'Register module did not hook right sidebar')

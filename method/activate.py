@@ -14,13 +14,13 @@ class activate(Method):
     def gdo_trigger(self) -> str:
         return ""
 
-    def gdo_parameters(self) -> [GDT]:
+    def gdo_parameters(self) -> list[GDT]:
         return [
             GDT_Object('id').table(GDO_UserActivation.table()),
             GDT_Token('token').not_null(),
         ]
 
-    def gdo_execute(self):
+    def gdo_execute(self) -> GDT:
         token = self.param_val('token')
         activation = self.param_value('id')
         if activation.gdo_hash() != token:
