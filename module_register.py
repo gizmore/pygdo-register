@@ -30,19 +30,19 @@ class module_register(GDO_Module):
             GDT_Bool('signup_mail_required').initial('1'),
         ]
 
-    def cfg_guest_signup(self) -> bool:
-        return self.get_config_value('signup_guests') and module_core.instance().cfg_guest_system()
+    async def cfg_guest_signup(self) -> bool:
+        return await self.get_config_value('signup_guests') and await module_core.instance().cfg_guest_system()
 
-    def cfg_signup_mail(self) -> bool:
-        return self.get_config_value('signup_mail_required')
+    async def cfg_signup_mail(self) -> bool:
+        return await self.get_config_value('signup_mail_required')
 
-    def cfg_signup_login(self) -> bool:
-        return self.get_config_value('signup_autologin')
+    async def cfg_signup_login(self) -> bool:
+        return await self.get_config_value('signup_autologin')
 
-    def gdo_init_sidebar(self, page):
-        if GDO_User.current().is_ghost():
+    async def gdo_init_sidebar(self, page):
+        if (await GDO_User.current()).is_ghost():
             page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_register'))
 
-    def gdo_init(self):
-        if self.cfg_guest_signup():
+    async def gdo_init(self):
+        if await self.cfg_guest_signup():
             self.subscribe('build_signup_form', lambda form: form.add_field(GDT_Link().href(self.href('guest')).text('mt_register_guest')))
