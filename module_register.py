@@ -16,6 +16,7 @@ class module_register(GDO_Module):
     def gdo_dependencies(self) -> list:
         return [
             'form',
+            'login',
         ]
 
     def gdo_classes(self):

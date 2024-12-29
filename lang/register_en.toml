@@ -6,7 +6,7 @@ module_register = "Sign-Up"
 mt_register_form = "Register"
 md_register_form = "Signup on this PyGDO Website."
 mails_signup = "Sign Up"
-mailb_signup = "Hello %s\n\nIt appears you want to signup on %s\n\nIf not, you can ignore this email.\n\nIf you want to signup, follow this link:\n\n%s\n\nKind Regards,\nThe {1} System"
+mailb_signup = "Hello %s\n\nIt appears you want to signup on %s\n\nIf not, you can ignore this email.\n\nIf you want to signup, follow this link:\n\n%s\n\nText command: ' %s '\n\nKind Regards,\nThe {1} System"
 msg_activation_mail_sent = "We have sent you an email with instructions how to activate your account."
 
 #########

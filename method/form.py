@@ -26,13 +26,12 @@ class form(MethodForm):
         form.add_field(GDT_Name('username').not_null())
         form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
-        if module_register.instance().cfg_signup_mail():
-            form.add_field(GDT_Email('email').not_null())
+        form.add_field(GDT_Email('email').not_null(module_register.instance().cfg_signup_mail()))
         super().gdo_create_form(form)
         Application.EVENTS.publish('build_signup_form', form)
 
     def validate_unique_name(self, form: GDT_Form, field: GDT, value: any) -> bool:
-        if Web.get_server().get_user_by_name(value):
+        if self._env_server.get_user_by_name(value):
             return field.error('err_violate_unique')
         return True
 
@@ -52,6 +51,7 @@ class form(MethodForm):
                     data[key] = val
         activation = GDO_UserActivation.blank({
             'ua_username': username,
+            'ua_server': self._env_server.get_id(),
             'ua_email': email,
             'ua_password': GDT_Password.hash(password),
             'ua_data': GDT_Serialize('ua_data').to_val(data),
@@ -67,10 +67,12 @@ class form(MethodForm):
         mail = Mail.from_bot()
         mail.subject(t('mails_signup'))
         link = GDT_Link().href(url('register', 'activate', f"&id={activation.get_id()}&token={activation.gdo_hash()}"))
+        text_command = f"$activate {activation.get_id()} {activation.gdo_hash()}"
         mail.body(t('mailb_signup', [
             activation.gdo_val('ua_username'),
             sitename(),
             link.render_html(),
+            text_command,
         ]))
         mail.recipient(activation.gdo_val('ua_email'))
         mail.send()

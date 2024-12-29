@@ -12,11 +12,14 @@ from gdo.register.module_register import module_register
 class activate(Method):
 
     def gdo_trigger(self) -> str:
-        return ""
+        return "activate"
+
+    def gdo_needs_authentication(self) -> bool:
+        return False
 
     def gdo_parameters(self) -> list[GDT]:
         return [
-            GDT_Object('id').table(GDO_UserActivation.table()),
+            GDT_Object('id').table(GDO_UserActivation.table()).not_null(),
             GDT_Token('token').not_null(),
         ]
 
@@ -29,14 +32,14 @@ class activate(Method):
 
     def activate(self, activation: GDO_UserActivation):
         username = activation.gdo_val('ua_username')
-        user = Web.get_server().create_user(username)
+        server = activation.gdo_value('ua_server')
+        user = server.get_or_create_user(username)
         self.msg('msg_activated')
         if module_enabled('mail'):
             from gdo.mail.module_mail import module_mail
             mail = activation.gdo_val('ua_email')
             if mail:
                 module_mail.instance().set_email_for(user, mail)
-                module_mail.instance().set_mail_confirmed_for(user)
         if module_enabled('login'):
             from gdo.login.module_login import module_login
             module_login.instance().set_password_hash_for(user, activation.gdo_val('ua_password'))
