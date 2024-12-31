@@ -1,5 +1,6 @@
 from gdo.base.Application import Application
 from gdo.base.Util import module_enabled
+from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Name import GDT_Name
 from gdo.core.GDT_Secret import GDT_Secret
 from gdo.form.GDT_Form import GDT_Form
@@ -20,6 +21,11 @@ class irc(form):
 
     def gdo_needs_authentication(self) -> bool:
         return False
+
+    def gdo_has_permission(self, user: 'GDO_User'):
+        if user._authenticated:
+            return False
+        return True
 
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Name('username').writable(False).hidden(True).initial(self._env_user.get_name()))

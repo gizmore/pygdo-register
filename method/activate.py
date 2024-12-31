@@ -2,9 +2,9 @@ from gdo.base.Application import Application
 from gdo.base.GDT import GDT
 from gdo.base.Method import Method
 from gdo.base.Util import module_enabled
+from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Object import GDT_Object
 from gdo.core.GDT_Token import GDT_Token
-from gdo.core.connector.Web import Web
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.register.module_register import module_register
 
@@ -16,6 +16,11 @@ class activate(Method):
 
     def gdo_needs_authentication(self) -> bool:
         return False
+
+    def gdo_has_permission(self, user: 'GDO_User'):
+        if user._authenticated:
+            return False
+        return True
 
     def gdo_parameters(self) -> list[GDT]:
         return [
