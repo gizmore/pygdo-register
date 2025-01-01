@@ -36,6 +36,6 @@ class guest(MethodForm):
         if back_to:
             link = GDT_Link().text('link_back_to').href(back_to).render()
             return self.msg('msg_guest_created_back', [displayname, link])
-        return self.msg('msg_guest_created')
+        return self.msg('msg_guest_created', [displayname])
 
 
