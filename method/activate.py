@@ -18,9 +18,7 @@ class activate(Method):
         return False
 
     def gdo_has_permission(self, user: 'GDO_User'):
-        if user._authenticated:
-            return False
-        return True
+        return not user._authenticated
 
     def gdo_parameters(self) -> list[GDT]:
         return [
@@ -52,4 +50,5 @@ class activate(Method):
                 from gdo.login.method.form import form
                 form().env_copy(self).login_success(user, False)
         Application.EVENTS.publish('user_activated', user, activation)
+        activation.delete()
         return self.empty()
