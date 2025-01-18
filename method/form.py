@@ -23,12 +23,12 @@ class form(MethodForm):
         return ""
 
     def gdo_create_form(self, form: GDT_Form) -> None:
-        form.add_field(GDT_Name('username').not_null())
+        form.add_field(GDT_Name('username').icon('account').not_null())
         form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
         form.add_field(GDT_Email('email').not_null(module_register.instance().cfg_signup_mail()))
-        super().gdo_create_form(form)
         Application.EVENTS.publish('build_signup_form', form)
+        super().gdo_create_form(form)
 
     def validate_unique_name(self, form: GDT_Form, field: GDT, value: any) -> bool:
         if self._env_server.get_user_by_name(value):
@@ -59,7 +59,8 @@ class form(MethodForm):
 
         if mod.cfg_signup_mail():
             self.send_signup_mail(activation)
-            return self.msg('msg_activation_mail_sent')
+            self.msg('msg_activation_mail_sent')
+            return self.empty()
         else:
             return activate().env_copy(self).activate(activation)
 
