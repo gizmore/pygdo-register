@@ -69,12 +69,12 @@ class form(MethodForm):
         mail.subject(t('mails_signup'))
         link = GDT_Link().href(url('register', 'activate', f"&id={activation.get_id()}&token={activation.gdo_hash()}"))
         text_command = f"$activate {activation.get_id()} {activation.gdo_hash()}"
-        mail.body(t('mailb_signup', [
+        mail.body(t('mailb_signup', (
             activation.gdo_val('ua_username'),
             sitename(),
             link.render_html(),
             text_command,
-        ]))
+        )))
         mail.recipient(activation.gdo_val('ua_email'))
         mail.send()
 
