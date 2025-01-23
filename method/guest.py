@@ -1,9 +1,11 @@
 from gdo.base.Util import module_enabled
+from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Name import GDT_Name
 from gdo.core.GDT_Password import GDT_Password
 from gdo.core.GDT_UserType import GDT_UserType
 from gdo.form.GDT_Form import GDT_Form
 from gdo.form.GDT_Submit import GDT_Submit
+from gdo.form.GDT_Validator import GDT_Validator
 from gdo.form.MethodForm import MethodForm
 from gdo.login.GDT_Login import GDT_Login
 from gdo.net.GDT_Url import GDT_Url
@@ -20,11 +22,17 @@ class guest(MethodForm):
 
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.text('md_register_guest')
-        form.add_field(GDT_Login('login').not_null())
+        form.add_field(GDT_Login('login').tooltip('tt_register_guest').not_null())
+        form.add_field(GDT_Validator().validator(form, 'login', self.validate_unique_username))
         if module_enabled('login'):
             form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Url('_back_to').internal().hidden())
         super().gdo_create_form(form)
+
+    def validate_unique_username(self, form: GDT_Form, gdt: GDT_Login, user_name: str):
+        if self._env_server.get_user_by_name(user_name):
+            return gdt.error('err_username_taken')
+        return True
 
     def gdo_submit_button(self) -> GDT_Submit:
         return super().gdo_submit_button().label('btn_as_guest')
