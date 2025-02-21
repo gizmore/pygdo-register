@@ -45,8 +45,7 @@ class guest(MethodForm):
             from gdo.login.module_login import module_login
             module_login.instance().set_password_for(user, self.param_val('password'))
         user.authenticate(self._env_session)
-        back_to = self.param_val('_back_to')
-        if back_to:
+        if back_to := self.param_val('_back_to'):
             link = GDT_Link().text('link_back_to').href(back_to).render()
             self.msg('msg_guest_created_back', (displayname, link))
         else:
