@@ -28,10 +28,14 @@ class irc(form):
         return True
 
     def gdo_create_form(self, form: GDT_Form) -> None:
-        form.add_field(GDT_Name('username').writable(False).hidden(True).initial(self._env_user.get_name()))
+        # form.add_field(GDT_Name('username').writable(False).hidden(True).initial(self._env_user.get_name()))
         form.add_field(GDT_Secret('password').not_null())
-        form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
+        # form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
         if module_enabled('mail'):
             form.add_field(GDT_Email('email').not_null(module_register.instance().cfg_signup_mail()))
-        Application.EVENTS.publish('build_signup_form', form)
+        # Application.EVENTS.publish('build_signup_form', form)
         form.actions().add_field(GDT_Submit().calling(self.form_submitted).default_button())
+
+    def form_submitted(self):
+        username = self._env_user.get_name()
+        return self.register(username)

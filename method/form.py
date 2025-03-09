@@ -22,6 +22,9 @@ class form(MethodForm):
     def gdo_trigger(self) -> str:
         return ""
 
+    def gdo_connectors(self) -> str:
+        return "web"
+
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Name('username').icon('account').not_null())
         form.add_field(GDT_Password('password').not_null())
@@ -36,8 +39,11 @@ class form(MethodForm):
         return True
 
     def form_submitted(self):
-        mod = module_register.instance()
         username = self.param_val('username')
+        return self.register(username)
+
+    def register(self, username: str):
+        mod = module_register.instance()
         password = self.param_val('password')
         email = self.param_val('email')
 

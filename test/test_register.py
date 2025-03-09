@@ -6,19 +6,19 @@ from gdo.base.ModuleLoader import ModuleLoader
 from gdo.core.GDO_User import GDO_User
 from gdo.core.connector.Web import Web
 from gdo.register.module_register import module_register
-from gdotest.TestUtil import reinstall_module, web_plug, WebPlug
+from gdotest.TestUtil import reinstall_module, web_plug, WebPlug, GDOTestCase
 
 
-class RegisterTest(unittest.TestCase):
+class RegisterTest(GDOTestCase):
 
     def setUp(self):
+        super().setUp()
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         loader.load_modules_db(True)
         reinstall_module('register')
         loader.init_modules(True, True)
         WebPlug.COOKIES = {}
-        return self
 
     def test_00_welcome_again(self):
         out = web_plug('core.welcome.html').exec()
