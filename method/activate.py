@@ -11,7 +11,8 @@ from gdo.register.module_register import module_register
 
 class activate(Method):
 
-    def gdo_trigger(self) -> str:
+    @classmethod
+    def gdo_trigger(cls) -> str:
         return "activate"
 
     def gdo_needs_authentication(self) -> bool:
