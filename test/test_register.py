@@ -15,8 +15,8 @@ class RegisterTest(GDOTestCase):
         super().setUp()
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
-        loader.load_modules_db(True)
         reinstall_module('register')
+        loader.load_modules_db(True)
         loader.init_modules(True, True)
         WebPlug.COOKIES = {}
 
