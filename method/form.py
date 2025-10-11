@@ -1,11 +1,10 @@
 from gdo.base.Application import Application
 from gdo.base.GDT import GDT
 from gdo.base.Trans import t, sitename
-from gdo.base.Util import url
+from gdo.base.util.href import url
 from gdo.core.GDT_Name import GDT_Name
 from gdo.core.GDT_Password import GDT_Password
 from gdo.core.GDT_Serialize import GDT_Serialize
-from gdo.core.connector.Web import Web
 from gdo.form.GDT_Form import GDT_Form
 from gdo.form.GDT_Validator import GDT_Validator
 from gdo.form.MethodForm import MethodForm
