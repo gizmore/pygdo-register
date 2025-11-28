@@ -27,14 +27,14 @@ class activate(Method):
             GDT_Token('token').not_null(),
         ]
 
-    def gdo_execute(self) -> GDT:
+    async def gdo_execute(self) -> GDT:
         token = self.param_val('token')
         activation = self.param_value('id')
         if activation.gdo_hash() != token:
             return self.err('err_token')
         return self.activate(activation)
 
-    def activate(self, activation: GDO_UserActivation):
+    async def activate(self, activation: GDO_UserActivation):
         username = activation.gdo_val('ua_username')
         server = activation.gdo_value('ua_server')
         user = server.get_or_create_user(username)
@@ -50,6 +50,6 @@ class activate(Method):
             if module_register.instance().cfg_signup_login():
                 from gdo.login.method.form import form
                 form().env_copy(self).login_success(user, False)
-        Application.EVENTS.publish('user_activated', user, activation)
+        await Application.EVENTS.publish('user_activated', user, activation)
         activation.delete()
         return self.empty()
