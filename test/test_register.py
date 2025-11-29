@@ -11,8 +11,8 @@ from gdotest.TestUtil import reinstall_module, web_plug, WebPlug, GDOTestCase
 
 class RegisterTest(GDOTestCase):
 
-    def setUp(self):
-        super().setUp()
+    async def asyncSetUp(self):
+        await super().asyncSetUp()
         Application.init(os.path.dirname(__file__ + "/../../../../"))
         loader = ModuleLoader.instance()
         reinstall_module('register')

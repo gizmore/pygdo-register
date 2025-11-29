@@ -37,7 +37,7 @@ class activate(Method):
     async def activate(self, activation: GDO_UserActivation):
         username = activation.gdo_val('ua_username')
         server = activation.gdo_value('ua_server')
-        user = server.get_or_create_user(username)
+        user = await server.get_or_create_user(username)
         self.msg('msg_activated')
         if module_enabled('mail'):
             from gdo.mail.module_mail import module_mail

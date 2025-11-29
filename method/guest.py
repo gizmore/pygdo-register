@@ -38,14 +38,14 @@ class guest(MethodForm):
     def gdo_submit_button(self) -> GDT_Submit:
         return super().gdo_submit_button().label('btn_as_guest')
 
-    def form_submitted(self):
+    async def form_submitted(self):
         username = self.param_val('login')
         displayname = f"~{username}~"
-        user = self._env_server.get_or_create_user(displayname, displayname, GDT_UserType.GUEST)
+        user = await self._env_server.get_or_create_user(displayname, displayname, GDT_UserType.GUEST)
         if module_enabled('login'):
             from gdo.login.module_login import module_login
             module_login.instance().set_password_for(user, self.param_val('password'))
-        user.authenticate(self._env_session)
+        await user.authenticate(self._env_session)
         if back_to := self.param_val('_back_to'):
             link = GDT_Link().text('link_back_to').href(back_to).render()
             self.msg('msg_guest_created_back', (displayname, link))

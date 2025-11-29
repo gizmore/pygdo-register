@@ -3,6 +3,7 @@ from gdo.base.GDT import GDT
 from gdo.core import module_core
 from gdo.core.GDO_User import GDO_User
 from gdo.core.GDT_Bool import GDT_Bool
+from gdo.form.GDT_Form import GDT_Form
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.ui.GDT_Link import GDT_Link
 
@@ -46,4 +47,8 @@ class module_register(GDO_Module):
 
     def gdo_init(self):
         if self.cfg_guest_signup():
-            self.subscribe('build_signup_form', lambda form: form.add_field(GDT_Link().href(self.href('guest')).text('mt_register_guest')))
+            self.subscribe('build_signup_form', self.guest_signup_form)
+
+    async def guest_signup_form(self, form: GDT_Form):
+        form.add_field(GDT_Link().href(self.href('guest')).text('mt_register_guest'))
+
