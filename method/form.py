@@ -32,7 +32,7 @@ class form(MethodForm):
         form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
         form.add_field(GDT_Email('email').not_null(module_register.instance().cfg_signup_mail()))
-        asyncio.run(Application.EVENTS.publish('build_signup_form', form))
+        asyncio.create_task(Application.EVENTS.publish('build_signup_form', form))
         super().gdo_create_form(form)
 
     def validate_unique_name(self, form: GDT_Form, field: GDT, value: any) -> bool:
