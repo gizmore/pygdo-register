@@ -32,7 +32,7 @@ class activate(Method):
         activation = self.param_value('id')
         if activation.gdo_hash() != token:
             return self.err('err_token')
-        return self.activate(activation)
+        return await self.activate(activation)
 
     async def activate(self, activation: GDO_UserActivation):
         username = activation.gdo_val('ua_username')
@@ -49,7 +49,7 @@ class activate(Method):
             module_login.instance().set_password_hash_for(user, activation.gdo_val('ua_password'))
             if module_register.instance().cfg_signup_login():
                 from gdo.login.method.form import form
-                form().env_copy(self).login_success(user, False)
+                await form().env_copy(self).login_success(user, False)
         await Application.EVENTS.publish('user_activated', user, activation)
         activation.delete()
         return self.empty()
