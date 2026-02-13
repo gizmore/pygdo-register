@@ -13,7 +13,7 @@ msg_activation_mail_sent = "We have sent you an email with instructions how to a
 # Guest #
 #########
 mt_register_guest = "Continue as Guest"
-md_register_guest = "Use this PyGDO Website as a guest user. You cannot recover if you loose your password."
+md_register_guest = "Use this Website as a guest user. Simply choose displayname and a password. Warning: You cannot recover your account when using guest mode."
 tt_register_guest = "Your guest nickname"
 
 link_back_to = 'back'
