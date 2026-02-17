@@ -6,6 +6,7 @@ from gdo.core.GDT_Bool import GDT_Bool
 from gdo.form.GDT_Form import GDT_Form
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.ui.GDT_Link import GDT_Link
+from gdo.base.GDO import GDO
 
 
 class module_register(GDO_Module):
@@ -20,7 +21,7 @@ class module_register(GDO_Module):
             'login',
         ]
 
-    def gdo_classes(self):
+    def gdo_classes(self) -> list[type[GDO]]:
         return [
             GDO_UserActivation,
         ]
