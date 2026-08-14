@@ -46,10 +46,9 @@ class module_register(GDO_Module):
         if GDO_User.current().is_ghost():
             page._right_bar.add_field(GDT_Link().href(self.href('form')).text('module_register'))
 
-    def gdo_init(self):
+    def gdo_subscribe_events(self):
         if self.cfg_guest_signup():
             self.subscribe('build_signup_form', self.guest_signup_form)
 
-    async def guest_signup_form(self, form: GDT_Form):
+    def guest_signup_form(self, form: GDT_Form):
         form.add_field(GDT_Link().href(self.href('guest')).text('mt_register_guest'))
-

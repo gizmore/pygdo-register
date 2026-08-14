@@ -18,6 +18,7 @@ class RegisterTest(GDOTestCase):
         reinstall_module('register')
         loader.load_modules_db(True)
         loader.init_modules(True, True)
+        loader.init_cli()
         WebPlug.COOKIES = {}
 
     def test_00_welcome_again(self):
