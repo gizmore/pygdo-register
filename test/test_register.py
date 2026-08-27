@@ -40,13 +40,13 @@ class RegisterTest(GDOTestCase):
         self.assertIsNotNone(user, "Simple guest signup does not work")
         self.assertIn('from where you came.', out, '_back_to does not work.')
 
-    def test_04_instant_register(self):
-        module_register.instance().save_config_val('signup_mail_required', '0')
+    async def test_04_instant_register(self):
+        await module_register.instance().save_config_val('signup_mail_required', '0')
         out = web_plug('register.form.html?username=petra2&password=11111111&submit=1').exec()
         user = GDO_User.current()
         user.delete()
         self.assertEqual(user.get_name(), 'petra2', 'After Register Not authenticated')
-        module_register.instance().save_config_val('signup_mail_required', '1')
+        await module_register.instance().save_config_val('signup_mail_required', '1')
 
     def test_05_register_and_signup(self):
         out = web_plug('register.form.html?username=petra&password=11111111&email=petra@gizmore.org&submit=1').exec()
