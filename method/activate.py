@@ -35,6 +35,9 @@ class activate(Method):
         return await self.activate(activation)
 
     async def activate(self, activation: GDO_UserActivation):
+        data = activation.gdo_value('ua_data') or {}
+        if user_id := data.get('mail_change_user'):
+            return await self.activate_mail_change(activation, user_id)
         username = activation.gdo_val('ua_username')
         server = activation.gdo_value('ua_server')
         user = await server.get_or_create_user(username)
@@ -53,3 +56,14 @@ class activate(Method):
         await Application.EVENTS.publish('user_activated', user, activation)
         activation.delete()
         return self.empty()
+
+    async def activate_mail_change(self, activation: GDO_UserActivation, user_id: str):
+        """Finish an address change after the new mailbox confirmed it."""
+        user = GDO_User.table().get_by_id(user_id)
+        if not user:
+            return self.err('err_activation_user')
+        if module_enabled('mail'):
+            from gdo.mail.module_mail import module_mail
+            module_mail.instance().set_email_for(user, activation.gdo_val('ua_email'), True)
+        activation.delete()
+        return self.msg('msg_mail_changed')

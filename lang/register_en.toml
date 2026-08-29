@@ -26,3 +26,4 @@ msg_guest_created_back = "You are now using the site as %s. Go %s from where you
 mt_register_activate = "Activate Account"
 md_register_activate = "Activate your account."
 msg_activated = "Your account has been activated."
+err_activation_user = "The account for this activation no longer exists."
