@@ -27,6 +27,12 @@ class form(MethodForm):
     def gdo_connectors(self) -> str:
         return "web"
 
+    def gdo_needs_authentication(self) -> bool:
+        return False
+
+    def gdo_user_type(self) -> str:
+        return 'ghost'
+
     def gdo_create_form(self, form: GDT_Form) -> None:
         form.add_field(GDT_Name('username').icon('account').not_null())
         form.add_field(GDT_Password('password').not_null())
