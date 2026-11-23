@@ -10,6 +10,8 @@ from gdo.form.MethodForm import MethodForm
 from gdo.login.GDT_Login import GDT_Login
 from gdo.net.GDT_Url import GDT_Url
 from gdo.ui.GDT_Link import GDT_Link
+from gdo.net.GDT_Redirect import GDT_Redirect
+from gdo.register.return_path import safe_return_path
 
 
 class guest(MethodForm):
@@ -49,9 +51,7 @@ class guest(MethodForm):
             from gdo.login.module_login import module_login
             module_login.instance().set_password_for(user, self.param_val('password'))
         await user.authenticate(self._env_session)
-        if back_to := self.param_val('_back_to'):
-            link = GDT_Link().text('link_back_to').href(back_to).render()
-            self.msg('msg_guest_created_back', (displayname, link))
-        else:
-            self.msg('msg_guest_created', (displayname,))
+        self.msg('msg_guest_created', (displayname,))
+        if back_to := safe_return_path(self.param_val('_back_to')):
+            return GDT_Redirect().href(back_to)
         return self.empty()

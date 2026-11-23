@@ -1,4 +1,5 @@
 module_register = "Sign-Up"
+link_register_guest_sidebar = "Sign up as Guest"
 
 ########
 # Form #

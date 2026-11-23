@@ -16,6 +16,7 @@ from gdo.register import module_register
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.register.method.activate import activate
 from gdo.ui.GDT_Link import GDT_Link
+from gdo.net.GDT_Url import GDT_Url
 
 
 class form(MethodForm):
@@ -38,6 +39,7 @@ class form(MethodForm):
         form.add_field(GDT_Password('password').not_null())
         form.add_field(GDT_Validator().validator(form, 'username', self.validate_unique_name))
         form.add_field(GDT_Email('email').not_null(module_register.instance().cfg_signup_mail()))
+        form.add_field(GDT_Url('_back_to').internal().hidden())
         Application.EVENTS.publish_sync('build_signup_form', form)
         super().gdo_create_form(form)
 

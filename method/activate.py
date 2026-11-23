@@ -55,6 +55,11 @@ class activate(Method):
                 await form().env_copy(self).login_success(user, False)
         await Application.EVENTS.publish('user_activated', user, activation)
         activation.delete()
+        if Application.IS_HTTP:
+            from gdo.register.return_path import safe_return_path
+            from gdo.net.GDT_Redirect import GDT_Redirect
+            if back_to := safe_return_path(data.get('_back_to')):
+                return GDT_Redirect().href(back_to)
         return self.empty()
 
     async def activate_mail_change(self, activation: GDO_UserActivation, user_id: str):
