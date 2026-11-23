@@ -18,6 +18,9 @@ class guest(MethodForm):
     def gdo_trigger(cls) -> str:
         return ""
 
+    def gdo_needs_authentication(self) -> bool:
+        return False
+
     def gdo_user_type(self) -> str | None:
         return 'ghost'
 
