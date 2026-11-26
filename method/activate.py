@@ -34,7 +34,7 @@ class activate(Method):
             return self.err('err_token')
         return await self.activate(activation)
 
-    async def activate(self, activation: GDO_UserActivation):
+    async def activate(self, activation: GDO_UserActivation, admin: bool = False):
         data = activation.gdo_value('ua_data') or {}
         if user_id := data.get('mail_change_user'):
             return await self.activate_mail_change(activation, user_id)
@@ -50,12 +50,12 @@ class activate(Method):
         if module_enabled('login'):
             from gdo.login.module_login import module_login
             module_login.instance().set_password_hash_for(user, activation.gdo_val('ua_password'))
-            if module_register.instance().cfg_signup_login():
+            if not admin and module_register.instance().cfg_signup_login():
                 from gdo.login.method.form import form
                 await form().env_copy(self).login_success(user, False)
         await Application.EVENTS.publish('user_activated', user, activation)
         activation.delete()
-        if Application.IS_HTTP:
+        if Application.IS_HTTP and not admin:
             from gdo.register.return_path import safe_return_path
             from gdo.net.GDT_Redirect import GDT_Redirect
             if back_to := safe_return_path(data.get('_back_to')):
