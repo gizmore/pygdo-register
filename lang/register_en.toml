@@ -33,3 +33,5 @@ md_register_admin_activations = "List pending sign-ups without exposing password
 mt_register_admin_activate = "Activate pending sign-up"
 md_register_admin_activate = "Activate a pending sign-up by ID from the administrative shell."
 msg_admin_activation_done = "Activation %s processed."
+mt_register_admin_activate_form = "Confirm activation"
+md_register_admin_activate_form = "Confirm activation of this pending sign-up."

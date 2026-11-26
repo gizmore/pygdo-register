@@ -1,5 +1,15 @@
 from gdo.register.GDO_UserActivation import GDO_UserActivation
 from gdo.table.MethodQueryTable import MethodQueryTable
+from gdo.ui.GDT_Link import GDT_Link
+from gdo.base.util.href import href
+
+
+class ActivationAction(GDT_Link):
+    def is_filterable(self):
+        return False
+
+    def is_orderable(self):
+        return False
 
 
 class admin_activations(MethodQueryTable):
@@ -16,7 +26,12 @@ class admin_activations(MethodQueryTable):
 
     def gdo_table_headers(self):
         columns = self.gdo_table().columns()
-        return [columns[name] for name in ('ua_id', 'ua_username', 'ua_server', 'ua_created')]
+        return [columns[name] for name in ('ua_id', 'ua_username', 'ua_server', 'ua_created')] + [
+            ActivationAction('activation_action').label('mt_register_admin_activate')]
+
+    def render_activation_action(self, field, activation):
+        return (GDT_Link().href(href('register', 'admin_activate_form', f'&id={activation.get_id()}'))
+                .text('mt_register_admin_activate').icon('check').render_html())
 
     def gdo_table_query(self):
         return self.gdo_table().select().only_select('ua_id,ua_username,ua_server,ua_created')

@@ -5,6 +5,7 @@ from gdo.base.Application import Application
 from gdo.base.Render import Mode
 from gdo.register.method.admin_activate import admin_activate
 from gdo.register.method.admin_activations import admin_activations
+from gdo.register.method.admin_activate_form import admin_activate_form
 from gdo.register.method.activate import activate
 
 
@@ -31,9 +32,29 @@ class AdminActivationTest(unittest.IsolatedAsyncioTestCase):
         table = MagicMock()
         table.columns.return_value = {name: name for name in ('ua_id', 'ua_username', 'ua_server', 'ua_created')}
         method.gdo_table = MagicMock(return_value=table)
-        self.assertEqual(['ua_id', 'ua_username', 'ua_server', 'ua_created'], method.gdo_table_headers())
+        headers = method.gdo_table_headers()
+        self.assertEqual(['ua_id', 'ua_username', 'ua_server', 'ua_created'], headers[:4])
+        self.assertFalse(headers[4].is_filterable())
+        self.assertFalse(headers[4].is_orderable())
         self.assertEqual('admin', method.gdo_user_permission())
         self.assertTrue(method.gdo_needs_authentication())
+
+    async def test_web_confirmation_uses_admin_activation(self):
+        Application.mode(Mode.render_cli)
+        method = admin_activate_form()
+        item = MagicMock()
+        item.get_id.return_value = '7'
+        method.param_value = MagicMock(return_value=item)
+        method.reply = MagicMock(return_value='done')
+        handler = MagicMock()
+        handler.env_copy.return_value = handler
+        handler.activate = AsyncMock(return_value=None)
+        with patch('gdo.register.method.admin_activate_form.activate', return_value=handler):
+            self.assertEqual('done', await method.form_submitted())
+        handler.activate.assert_awaited_once_with(item, admin=True)
+        self.assertTrue(method.gdo_needs_authentication())
+        self.assertEqual('admin', method.gdo_user_permission())
+        self.assertEqual('web', method.gdo_connectors())
 
     async def test_admin_activation_does_not_log_in_new_user(self):
         Application.mode(Mode.render_cli)
