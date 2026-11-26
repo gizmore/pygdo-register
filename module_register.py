@@ -28,6 +28,9 @@ class module_register(GDO_Module):
             GDO_UserActivation,
         ]
 
+    def gdo_admin_links(self) -> list[GDT_Link]:
+        return [GDT_Link().href(self.href('admin_activations')).text('mt_register_admin_activations')]
+
     def gdo_module_config(self) -> list[GDT]:
         return [
             GDT_Bool('signup_guests').initial('1'),
